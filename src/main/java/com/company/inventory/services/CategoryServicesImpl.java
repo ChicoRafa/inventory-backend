@@ -93,4 +93,42 @@ public class CategoryServicesImpl implements ICategoryService {
 
         return new ResponseEntity<CategoryResponseRest>(response, HttpStatus.CREATED);
     }
+
+    /**
+     * Update an existing category by ID
+     *
+     * @param category Category object with updated data
+     * @param id       ID of the category to be updated
+     * @return ResponseEntity containing CategoryResponseRest
+     */
+    @Override
+    @Transactional
+    public ResponseEntity<CategoryResponseRest> update(Category category, Long id) {
+        CategoryResponseRest response = new CategoryResponseRest();
+        List<Category> categoryList = new ArrayList<>();
+
+        try {
+            Optional<Category> existingCategoryOpt = categoryDao.findById(id);
+            if (existingCategoryOpt.isPresent()) {
+                Category existingCategory = existingCategoryOpt.get();
+                existingCategory.setName(category.getName());
+                existingCategory.setDescription(category.getDescription());
+
+                Category updatedCategory = categoryDao.save(existingCategory);
+                categoryList.add(updatedCategory);
+                response.getCategoryResponse().setCategory(categoryList);
+                response.setMetadata("OK", "00", "Category updated successfully");
+            } else {
+                response.setMetadata("NOT_FOUND", "01", "Category not found with ID: " + id);
+                return new ResponseEntity<CategoryResponseRest>(response, HttpStatus.NOT_FOUND);
+            }
+
+        } catch (Exception e) {
+            response.setMetadata("ERROR", "-1", "Database error while updating category with ID: " + id);
+            log.error("Error updating category with ID: {}", id, e);
+            return new ResponseEntity<CategoryResponseRest>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<CategoryResponseRest>(response, HttpStatus.OK);
+    }
 }

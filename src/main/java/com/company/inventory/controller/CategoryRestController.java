@@ -61,4 +61,27 @@ public class CategoryRestController {
         ResponseEntity<CategoryResponseRest> response = categoryService.update(category, id);
         return response;
     }
+
+    /**
+     * Delete category by ID
+     *
+     * @param id Category ID to be deleted
+     * @return ResponseEntity containing CategoryResponseRest
+     */
+    @DeleteMapping("/categories/{id}")
+    public ResponseEntity<CategoryResponseRest> deleteCategoryById(@PathVariable Long id) {
+        ResponseEntity<CategoryResponseRest> response = categoryService.deleteById(id);
+        return response;
+    }
+
+    /**
+     * Delete all categories
+     *
+     * @return ResponseEntity containing CategoryResponseRest
+     */
+    @DeleteMapping("/categories")
+    public ResponseEntity<CategoryResponseRest> deleteAllCategories() {
+        ResponseEntity<CategoryResponseRest> response = categoryService.deleteAll();
+        return response;
+    }
 }

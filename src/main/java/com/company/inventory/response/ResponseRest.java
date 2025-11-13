@@ -1,0 +1,21 @@
+package com.company.inventory.response;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class ResponseRest {
+    private ArrayList<HashMap<String, String>> metadata = new ArrayList<>();
+
+    public ArrayList<HashMap<String, String>> getMetadata() {
+        return metadata;
+    }
+
+    public void setMetadata(String type, String code, String date) {
+        HashMap<String, String> metadataMap = new HashMap<>();
+        metadataMap.put("type", type);
+        metadataMap.put("code", code);
+        metadataMap.put("date", date);
+
+        this.metadata.add(metadataMap);
+    }
+}
